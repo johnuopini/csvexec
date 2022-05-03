@@ -9,17 +9,21 @@ on:
 
 # workflow tasks
 jobs:
-  generate:
-    name: Generate cross-platform builds
+  releases-matrix:
+    name: Release Go Binary
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [ linux, darwin ]
+        goarch: [ amd64, arm64 ]
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-      - name: Generate build files
-        uses: thatisuday/go-cross-build@v1
+      - uses: actions/checkout@v3
+      - uses: wangyoucao577/go-release-action@v1.28
         with:
-          platforms: 'linux/amd64, darwin/amd64, darwin/arm64, linux/arm64'
-          package: 'csvexec'
-          name: 'csvexec'
-          compress: 'false'
-          dest: 'dist'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: "https://dl.google.com/go/go1.18.1.linux-amd64.tar.gz"
+          project_path: "."
+          binary_name: "csvexec"
+          extra_files: LICENSE README.md
