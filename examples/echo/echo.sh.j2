@@ -1,0 +1,7 @@
+sleep $(printf '%s\n' $(echo "scale=8; $RANDOM/32768" | bc ))
+if [ "$RANDOM" -gt "28000" ]; then
+  echo "Random failure" >&2
+  exit 1
+fi
+echo "CSV name field is: {{ name }}"
+exit 0
