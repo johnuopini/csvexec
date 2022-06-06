@@ -41,6 +41,7 @@ func (j *Job) Exec() JobResult {
 	f, err := os.OpenFile(scriptPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0700)
 	if err == nil {
 		_, err = f.WriteString(script)
+		_ = f.Close()
 	}
 	if err != nil {
 		log.Printf("Cannot write script at line %v, %v\n", j.line, err)
